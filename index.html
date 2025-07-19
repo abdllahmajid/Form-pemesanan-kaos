@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Pemesanan Kaos</title>
+    <title>Form Pemesanan Kaos - Multi Produk</title>
     <style>
         * {
             box-sizing: border-box;
@@ -16,10 +16,11 @@
             background: linear-gradient(135deg, #81C784 0%, #4CAF50 100%);
             min-height: 100vh;
             padding: 15px;
+            font-size: 14px;
         }
 
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -39,6 +40,30 @@
             background-clip: text;
         }
 
+        .info-box {
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .info-box h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .info-box ul {
+            color: #666;
+            margin-left: 20px;
+            font-size: 14px;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+
         .form-group {
             margin-bottom: 25px;
         }
@@ -48,64 +73,194 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: #555;
-            font-size: 1.1em;
+            font-size: 1em;
         }
 
-        select, input {
+        .required::after {
+            content: " *";
+            color: #d4183d;
+        }
+
+        select, input, textarea {
             width: 100%;
             padding: 15px;
             border: 2px solid #ddd;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 14px;
             transition: all 0.3s ease;
             background: white;
         }
 
-        select:focus, input:focus {
+        select:focus, input:focus, textarea:focus {
             outline: none;
             border-color: #4CAF50;
             box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
             transform: translateY(-2px);
         }
 
-        .radio-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-top: 10px;
+        textarea {
+            resize: vertical;
+            min-height: 80px;
         }
 
-        .radio-item {
-            width: 100%;
+        .products-section {
+            margin-bottom: 30px;
         }
 
-        .radio-item input[type="radio"] {
-            display: none;
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .radio-item label {
-            display: block;
-            padding: 15px 10px;
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            text-align: center;
+        .products-header h3 {
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             background: white;
-            margin-bottom: 0;
+            color: #4CAF50;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn:hover {
+            background: #4CAF50;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-add {
+            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            color: white;
+            border-color: transparent;
+        }
+
+        .btn-add:hover {
+            background: linear-gradient(45deg, #2E7D32, #1B5E20);
+            transform: translateY(-2px);
+        }
+
+        .btn-remove {
+            background: #fff;
+            border-color: #d4183d;
+            color: #d4183d;
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .btn-remove:hover {
+            background: #d4183d;
+            color: white;
+        }
+
+        .product-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .product-title {
+            font-size: 1.1em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .product-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Button-style options */
+        .button-group {
+            display: grid;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .button-group.colors {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .button-group.sleeves {
+            grid-template-columns: 1fr;
+        }
+
+        .option-button {
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            color: #333;
             font-size: 14px;
-            min-height: 60px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
         }
 
-        .radio-item input[type="radio"]:checked + label {
+        .option-button:hover:not(.disabled) {
             border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .option-button.selected {
             background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            border-color: #4CAF50;
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .option-button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .quantity-field {
+            max-width: 150px;
         }
 
         .btn-submit {
@@ -122,43 +277,24 @@
             margin-top: 20px;
         }
 
-        .btn-submit:hover {
+        .btn-submit:hover:not(:disabled) {
             transform: translateY(-3px);
             box-shadow: 0 15px 30px rgba(76, 175, 80, 0.4);
         }
 
-        .btn-submit:active {
-            transform: translateY(-1px);
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        .color-disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .info-box {
-            background: rgba(76, 175, 80, 0.1);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            border-left: 4px solid #4CAF50;
-        }
-
-        .info-box h3 {
-            color: #4CAF50;
-            margin-bottom: 10px;
-        }
-
-        .info-box ul {
-            color: #666;
-            margin-left: 20px;
-        }
-
+        /* Order Summary */
         .order-summary {
-            background: rgba(46, 125, 50, 0.1);
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid rgba(76, 175, 80, 0.2);
             border-radius: 12px;
             padding: 20px;
-            margin-top: 20px;
+            margin-bottom: 20px;
             display: none;
         }
 
@@ -167,34 +303,58 @@
             animation: slideIn 0.3s ease;
         }
 
-        .size-section {
+        .order-summary h3 {
+            color: #2E7D32;
+            margin-bottom: 15px;
+        }
+
+        .summary-row {
             display: flex;
-            gap: 10px;
-            align-items: flex-end;
-        }
-
-        .size-section select {
-            flex: 1;
-        }
-
-        .size-chart-btn {
-            padding: 15px 20px;
-            background: linear-gradient(45deg, #66BB6A, #43A047);
-            color: white;
-            border: none;
-            border-radius: 12px;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px dashed #ddd;
             font-size: 14px;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
+            font-size: 16px;
+            color: #2E7D32;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid rgba(76, 175, 80, 0.3);
         }
 
-        .size-chart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 187, 106, 0.3);
+        .summary-products {
+            margin: 15px 0;
         }
 
+        .summary-product {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .summary-product-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .summary-product-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -234,19 +394,6 @@
 
         .close:hover {
             color: #4CAF50;
-        }
-
-        .size-chart-container {
-            text-align: center;
-        }
-
-        .size-chart-container h2 {
-            color: #333;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #4CAF50, #2E7D32);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .size-chart-table {
@@ -294,21 +441,6 @@
             color: #666;
         }
 
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 8px 0;
-            border-bottom: 1px dashed #ddd;
-        }
-
-        .summary-item:last-child {
-            border-bottom: none;
-            font-weight: 600;
-            font-size: 1.1em;
-            color: #2E7D32;
-        }
-
         /* Mobile optimizations */
         @media (max-width: 768px) {
             body {
@@ -324,27 +456,24 @@
                 margin-bottom: 20px;
             }
             
-            .radio-group {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-            
-            .radio-item label {
-                padding: 12px 8px;
-                font-size: 13px;
-                min-height: 50px;
-            }
-            
-            .size-section {
+            .products-header {
                 flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header-buttons {
+                justify-content: center;
+            }
+            
+            .product-form {
+                grid-template-columns: 1fr;
                 gap: 15px;
             }
-
-            .size-chart-btn {
-                width: 100%;
-                margin-top: 0;
+            
+            .button-group.colors {
+                grid-template-columns: 1fr;
             }
-
+            
             .modal-content {
                 margin: 10% auto;
                 width: 95%;
@@ -354,7 +483,7 @@
             .size-chart-table th,
             .size-chart-table td {
                 padding: 8px 5px;
-                font-size: 14px;
+                font-size: 12px;
             }
         }
 
@@ -367,37 +496,14 @@
                 font-size: 1.6em;
             }
             
-            .radio-group {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-            
-            .radio-item label {
-                padding: 10px 8px;
+            .btn {
+                padding: 8px 12px;
                 font-size: 12px;
-                min-height: 45px;
-            }
-            
-            select, input {
-                padding: 12px;
-                font-size: 14px;
             }
             
             .btn-submit {
                 padding: 15px;
                 font-size: 16px;
-            }
-            
-            .summary-item {
-                font-size: 14px;
-            }
-            
-            .info-box {
-                padding: 15px;
-            }
-            
-            .info-box ul {
-                font-size: 14px;
             }
         }
 
@@ -411,6 +517,10 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -428,111 +538,58 @@
         </div>
 
         <form id="orderForm">
+            <!-- Customer Information -->
             <div class="form-group">
-                <label for="customerName">Nama Pemesan:</label>
+                <label for="customerName" class="required">Nama Pemesan</label>
                 <input type="text" id="customerName" name="customerName" required>
             </div>
 
             <div class="form-group">
-                <label for="phone">Nomor Telepon:</label>
+                <label for="phone" class="required">Nomor Telepon</label>
                 <input type="tel" id="phone" name="phone" placeholder="Contoh: 085123456789" required>
             </div>
 
-            <div class="form-group">
-                <label for="shirtCode">Kode Kaos:</label>
-                <select id="shirtCode" name="shirtCode" required>
-                    <option value="">-- Pilih Kode Kaos --</option>
-                    <option value="01">Kode 01</option>
-                    <option value="02">Kode 02</option>
-                    <option value="03">Kode 03</option>
-                    <option value="04">Kode 04</option>
-                    <option value="05">Kode 05</option>
-                    <option value="06">Kode 06</option>
-                    <option value="07">Kode 07</option>
-                    <option value="08">Kode 08</option>
-                </select>
-            </div>
+            <!-- Products Section -->
+            <div class="products-section">
+                <div class="products-header">
+                    <h3>Produk yang Dipesan</h3>
+                    <div class="header-buttons">
+                        <button type="button" class="btn" id="sizeChartBtn">
+                            📏 Lihat Size Chart
+                        </button>
+                        <button type="button" class="btn btn-add" id="addProductBtn">
+                            ➕ Tambah Produk
+                        </button>
+                    </div>
+                </div>
 
-            <div class="form-group">
-                <label>Warna Kaos:</label>
-                <div class="radio-group" id="colorOptions">
-                    <div class="radio-item color-disabled">
-                        <input type="radio" id="black" name="color" value="hitam">
-                        <label for="black">⚫ Hitam</label>
-                    </div>
-                    <div class="radio-item color-disabled">
-                        <input type="radio" id="white" name="color" value="putih">
-                        <label for="white">⚪ Putih</label>
-                    </div>
-                    <div class="radio-item color-disabled">
-                        <input type="radio" id="green" name="color" value="hijau">
-                        <label for="green">🟢 Hijau</label>
-                    </div>
-                    <div class="radio-item color-disabled">
-                        <input type="radio" id="navy" name="color" value="navy">
-                        <label for="navy">🔵 Navy</label>
-                    </div>
+                <div id="productsContainer">
+                    <!-- Products will be dynamically added here -->
                 </div>
             </div>
 
+            <!-- Notes -->
             <div class="form-group">
-                <label>Jenis Lengan:</label>
-                <div class="radio-group" id="sleeveOptions">
-                    <div class="radio-item">
-                        <input type="radio" id="short" name="sleeve" value="pendek" required>
-                        <label for="short">Lengan Pendek</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="long" name="sleeve" value="panjang">
-                        <label for="long">Lengan Panjang</label>
-                    </div>
-                </div>
+                <label for="notes">Catatan Tambahan</label>
+                <textarea id="notes" name="notes" placeholder="Masukkan catatan khusus jika ada..."></textarea>
             </div>
 
-            <div class="form-group">
-                <label for="size">Ukuran:</label>
-                <div class="size-section">
-                    <select id="size" name="size" required>
-                        <option value="">-- Pilih Ukuran --</option>
-                        <option value="S">S (Small)</option>
-                        <option value="M">M (Medium)</option>
-                        <option value="L">L (Large)</option>
-                        <option value="XL">XL (Extra Large)</option>
-                        <option value="XXL">XXL (Double XL)</option>
-                        <option value="3XL">3XL (Triple XL)</option>
-                        <option value="4XL">4XL (Quad XL)</option>
-                        <option value="5XL">5XL (Penta XL)</option>
-                    </select>
-                    <button type="button" class="size-chart-btn" id="sizeChartBtn">
-                        Lihat Size Chart
-                    </button>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="quantity">Jumlah:</label>
-                <input type="number" id="quantity" name="quantity" min="1" value="1" required>
-            </div>
-
-            <div class="form-group">
-                <label for="notes">Catatan Tambahan:</label>
-                <input type="text" id="notes" name="notes" placeholder="Masukkan catatan khusus jika ada...">
-            </div>
-
+            <!-- Order Summary -->
             <div class="order-summary" id="orderSummary">
-                <h3>Ringkasan Pesanan:</h3>
+                <h3>Ringkasan Pesanan</h3>
                 <div id="summaryContent"></div>
             </div>
 
-            <button type="submit" class="btn-submit">Pesan Sekarang</button>
+            <button type="submit" class="btn-submit" id="submitBtn">Pesan Sekarang</button>
         </form>
 
         <!-- Size Chart Modal -->
         <div id="sizeChartModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <div class="size-chart-container">
-                    <h2>Size Chart</h2>
+                <div style="text-align: center;">
+                    <h2 style="background: linear-gradient(45deg, #4CAF50, #2E7D32); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px;">Size Chart</h2>
+                    <p style="color: #666; margin-bottom: 20px;">Panduan ukuran untuk membantu Anda memilih ukuran yang tepat</p>
                     
                     <table class="size-chart-table">
                         <thead>
@@ -587,207 +644,426 @@
     </div>
 
     <script>
-        const shirtCode = document.getElementById('shirtCode');
-        const colorOptions = document.getElementById('colorOptions');
-        const colorRadios = colorOptions.querySelectorAll('input[type="radio"]');
-        const colorItems = colorOptions.querySelectorAll('.radio-item');
-        const sleeveOptions = document.getElementById('sleeveOptions');
-        const sleeveRadios = sleeveOptions.querySelectorAll('input[type="radio"]');
-        const sleeveItems = sleeveOptions.querySelectorAll('.radio-item');
-        const orderSummary = document.getElementById('orderSummary');
-        const summaryContent = document.getElementById('summaryContent');
-        const form = document.getElementById('orderForm');
+        // Global variables
+        let productCounter = 0;
+        let products = [];
 
-        // Size Chart Modal
+        // DOM elements
+        const form = document.getElementById('orderForm');
+        const productsContainer = document.getElementById('productsContainer');
+        const addProductBtn = document.getElementById('addProductBtn');
         const sizeChartBtn = document.getElementById('sizeChartBtn');
         const sizeChartModal = document.getElementById('sizeChartModal');
         const closeModal = document.querySelector('.close');
+        const orderSummary = document.getElementById('orderSummary');
+        const summaryContent = document.getElementById('summaryContent');
+        const submitBtn = document.getElementById('submitBtn');
+        const phoneInput = document.getElementById('phone');
 
-        // Open size chart modal
+        // Product options
+        const COLOR_OPTIONS = [
+            { value: 'hitam', label: 'Hitam', emoji: '⚫' },
+            { value: 'putih', label: 'Putih', emoji: '⚪' },
+            { value: 'hijau', label: 'Hijau', emoji: '🟢' },
+            { value: 'navy', label: 'Navy', emoji: '🔵' }
+        ];
+
+        const SLEEVE_OPTIONS = [
+            { value: 'pendek', label: 'Lengan Pendek' },
+            { value: 'panjang', label: 'Lengan Panjang' }
+        ];
+
+        const SIZE_OPTIONS = [
+            { value: 'S', label: 'S (Small)' },
+            { value: 'M', label: 'M (Medium)' },
+            { value: 'L', label: 'L (Large)' },
+            { value: 'XL', label: 'XL (Extra Large)' },
+            { value: 'XXL', label: 'XXL (Double XL)' },
+            { value: '3XL', label: '3XL (Triple XL)' },
+            { value: '4XL', label: '4XL (Quad XL)' },
+            { value: '5XL', label: '5XL (Penta XL)' }
+        ];
+
+        // Helper functions
+        function getAvailableColors(code) {
+            if (code === '01' || code === '02') {
+                return ['hitam', 'putih', 'hijau'];
+            } else if (['03', '04', '05', '06'].includes(code)) {
+                return ['hitam'];
+            } else if (code === '07' || code === '08') {
+                return ['hitam', 'navy'];
+            }
+            return [];
+        }
+
+        function getAvailableSleeves(code) {
+            if (code === '07' || code === '08') {
+                return ['panjang']; // Sweater only long sleeve
+            }
+            return ['pendek', 'panjang'];
+        }
+
+        function formatPhoneNumber(value) {
+            let cleanValue = value.replace(/\D/g, '');
+            
+            if (cleanValue.startsWith('0')) {
+                cleanValue = '62' + cleanValue.substring(1);
+            } else if (cleanValue.startsWith('8') && !cleanValue.startsWith('62')) {
+                cleanValue = '62' + cleanValue;
+            } else if (cleanValue.length > 0 && !cleanValue.startsWith('62') && cleanValue.charAt(0) === '8') {
+                cleanValue = '62' + cleanValue;
+            }
+            
+            return cleanValue;
+        }
+
+        function createProductHTML(productId) {
+            return `
+                <div class="product-card" data-product-id="${productId}">
+                    <div class="product-header">
+                        <div class="product-title">Produk ${products.length}</div>
+                        <button type="button" class="btn btn-remove" onclick="removeProduct('${productId}')" ${products.length <= 1 ? 'style="display: none;"' : ''}>
+                            🗑️ Hapus
+                        </button>
+                    </div>
+                    <div class="product-form">
+                        <div class="form-field">
+                            <label class="required">Kode Kaos</label>
+                            <select name="code_${productId}" onchange="updateProductOptions('${productId}')" required>
+                                <option value="">-- Pilih Kode Kaos --</option>
+                                <option value="01">Kode 01</option>
+                                <option value="02">Kode 02</option>
+                                <option value="03">Kode 03</option>
+                                <option value="04">Kode 04</option>
+                                <option value="05">Kode 05</option>
+                                <option value="06">Kode 06</option>
+                                <option value="07">Kode 07</option>
+                                <option value="08">Kode 08</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-field">
+                            <label class="required">Ukuran</label>
+                            <select name="size_${productId}" required>
+                                <option value="">-- Pilih Ukuran --</option>
+                                ${SIZE_OPTIONS.map(size => `<option value="${size.value}">${size.label}</option>`).join('')}
+                            </select>
+                        </div>
+                        
+                        <div class="form-field">
+                            <label class="required">Warna Kaos</label>
+                            <div class="button-group colors" id="colors_${productId}">
+                                ${COLOR_OPTIONS.map(color => `
+                                    <button type="button" class="option-button disabled" 
+                                            onclick="selectColor('${productId}', '${color.value}')"
+                                            data-value="${color.value}">
+                                        <span>${color.emoji}</span>
+                                        <span>${color.label}</span>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="form-field">
+                            <label class="required">Jenis Lengan</label>
+                            <div class="button-group sleeves" id="sleeves_${productId}">
+                                ${SLEEVE_OPTIONS.map(sleeve => `
+                                    <button type="button" class="option-button" 
+                                            onclick="selectSleeve('${productId}', '${sleeve.value}')"
+                                            data-value="${sleeve.value}">
+                                        ${sleeve.label}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="form-field quantity-field">
+                            <label class="required">Jumlah</label>
+                            <input type="number" name="quantity_${productId}" min="1" value="1" 
+                                   onchange="updateSummary()" required>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectColor(productId, colorValue) {
+            const colorButtons = document.querySelectorAll(`#colors_${productId} .option-button`);
+            colorButtons.forEach(btn => {
+                if (btn.dataset.value === colorValue && !btn.classList.contains('disabled')) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+            updateSummary();
+        }
+
+        function selectSleeve(productId, sleeveValue) {
+            const sleeveButtons = document.querySelectorAll(`#sleeves_${productId} .option-button`);
+            sleeveButtons.forEach(btn => {
+                if (btn.dataset.value === sleeveValue && !btn.classList.contains('disabled')) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+            updateSummary();
+        }
+
+        function addProduct() {
+            productCounter++;
+            const productId = `product_${productCounter}`;
+            products.push(productId);
+            
+            productsContainer.insertAdjacentHTML('beforeend', createProductHTML(productId));
+            updateProductNumbers();
+            updateSummary();
+        }
+
+        function removeProduct(productId) {
+            if (products.length > 1) {
+                const productCard = document.querySelector(`[data-product-id="${productId}"]`);
+                productCard.remove();
+                products = products.filter(id => id !== productId);
+                updateProductNumbers();
+                updateSummary();
+            }
+        }
+
+        function updateProductNumbers() {
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach((card, index) => {
+                const title = card.querySelector('.product-title');
+                title.textContent = `Produk ${index + 1}`;
+                
+                const removeBtn = card.querySelector('.btn-remove');
+                if (products.length <= 1) {
+                    removeBtn.style.display = 'none';
+                } else {
+                    removeBtn.style.display = 'inline-flex';
+                }
+            });
+        }
+
+        function updateProductOptions(productId) {
+            const codeSelect = document.querySelector(`select[name="code_${productId}"]`);
+            const code = codeSelect.value;
+            
+            const colorsContainer = document.getElementById(`colors_${productId}`);
+            const sleevesContainer = document.getElementById(`sleeves_${productId}`);
+            
+            // Reset all options
+            colorsContainer.querySelectorAll('.option-button').forEach(btn => {
+                btn.classList.add('disabled');
+                btn.classList.remove('selected');
+            });
+            
+            sleevesContainer.querySelectorAll('.option-button').forEach(btn => {
+                btn.classList.remove('disabled', 'selected');
+            });
+            
+            if (code) {
+                const availableColors = getAvailableColors(code);
+                const availableSleeves = getAvailableSleeves(code);
+                
+                // Enable available colors
+                availableColors.forEach(colorValue => {
+                    const colorBtn = colorsContainer.querySelector(`[data-value="${colorValue}"]`);
+                    colorBtn.classList.remove('disabled');
+                });
+                
+                // Handle sleeve options for sweaters
+                if (code === '07' || code === '08') {
+                    sleevesContainer.querySelectorAll('.option-button').forEach(btn => {
+                        if (btn.dataset.value === 'pendek') {
+                            btn.classList.add('disabled');
+                        } else if (btn.dataset.value === 'panjang') {
+                            btn.classList.add('selected');
+                        }
+                    });
+                }
+            }
+            
+            updateSummary();
+        }
+
+        function getSelectedValue(productId, type) {
+            const selectedBtn = document.querySelector(`#${type}_${productId} .option-button.selected:not(.disabled)`);
+            return selectedBtn ? selectedBtn.dataset.value : '';
+        }
+
+        function updateSummary() {
+            const customerName = document.getElementById('customerName').value;
+            const phone = document.getElementById('phone').value;
+            const notes = document.getElementById('notes').value;
+            
+            const validProducts = [];
+            let totalQuantity = 0;
+            
+            products.forEach(productId => {
+                const code = document.querySelector(`select[name="code_${productId}"]`)?.value;
+                const color = getSelectedValue(productId, 'colors');
+                const sleeve = getSelectedValue(productId, 'sleeves');
+                const size = document.querySelector(`select[name="size_${productId}"]`)?.value;
+                const quantity = parseInt(document.querySelector(`input[name="quantity_${productId}"]`)?.value) || 0;
+                
+                if (code && color && sleeve && size && quantity > 0) {
+                    validProducts.push({ code, color, sleeve, size, quantity });
+                    totalQuantity += quantity;
+                }
+            });
+            
+            if (customerName && phone && validProducts.length > 0) {
+                let summaryHTML = `
+                    <div class="summary-row">
+                        <span>Nama Pemesan:</span>
+                        <span>${customerName}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Telepon:</span>
+                        <span>${phone}</span>
+                    </div>
+                `;
+                
+                if (validProducts.length > 0) {
+                    summaryHTML += '<div class="summary-products">';
+                    validProducts.forEach((product, index) => {
+                        summaryHTML += `
+                            <div class="summary-product">
+                                <div class="summary-product-header">
+                                    <span>Produk ${index + 1}</span>
+                                    <span>${product.quantity} pcs</span>
+                                </div>
+                                <div class="summary-product-details">
+                                    <span>Kode: ${product.code}</span>
+                                    <span>Ukuran: ${product.size}</span>
+                                    <span>Warna: ${product.color}</span>
+                                    <span>Lengan: ${product.sleeve}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    summaryHTML += '</div>';
+                }
+                
+                if (notes) {
+                    summaryHTML += `
+                        <div class="summary-row">
+                            <span>Catatan:</span>
+                            <span>${notes}</span>
+                        </div>
+                    `;
+                }
+                
+                summaryHTML += `
+                    <div class="summary-row">
+                        <span>Total Pesanan:</span>
+                        <span>${totalQuantity} pcs</span>
+                    </div>
+                `;
+                
+                summaryContent.innerHTML = summaryHTML;
+                orderSummary.classList.add('show');
+            } else {
+                orderSummary.classList.remove('show');
+            }
+            
+            // Update submit button state
+            const isValid = customerName && phone && validProducts.length > 0;
+            submitBtn.disabled = !isValid;
+        }
+
+        // Event listeners
+        phoneInput.addEventListener('input', function(e) {
+            e.target.value = formatPhoneNumber(e.target.value);
+            updateSummary();
+        });
+
+        addProductBtn.addEventListener('click', addProduct);
+
         sizeChartBtn.addEventListener('click', function() {
             sizeChartModal.style.display = 'block';
         });
 
-        // Close size chart modal
         closeModal.addEventListener('click', function() {
             sizeChartModal.style.display = 'none';
         });
 
-        // Close modal when clicking outside
         window.addEventListener('click', function(event) {
             if (event.target === sizeChartModal) {
                 sizeChartModal.style.display = 'none';
             }
         });
 
-        // Phone number formatting
-        const phoneInput = document.getElementById('phone');
-        
-        phoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
-            
-            // If starts with 0, replace with 62
-            if (value.startsWith('0')) {
-                value = '62' + value.substring(1);
-            }
-            // If starts with 8 (without 0), add 62
-            else if (value.startsWith('8') && !value.startsWith('62')) {
-                value = '62' + value;
-            }
-            // If doesn't start with 62 and has digits, assume it needs 62 prefix
-            else if (value.length > 0 && !value.startsWith('62')) {
-                // Only add 62 if it looks like an Indonesian number (starts with 8)
-                if (value.charAt(0) === '8') {
-                    value = '62' + value;
-                }
-            }
-            
-            e.target.value = value;
-        });
-
-        phoneInput.addEventListener('paste', function(e) {
-            // Handle paste event
-            setTimeout(() => {
-                let value = e.target.value.replace(/\D/g, '');
-                
-                if (value.startsWith('0')) {
-                    value = '62' + value.substring(1);
-                    e.target.value = value;
-                } else if (value.startsWith('8') && !value.startsWith('62')) {
-                    value = '62' + value;
-                    e.target.value = value;
-                }
-            }, 10);
-        });
-
-        // Update color options based on shirt code
-        shirtCode.addEventListener('change', function() {
-            const code = this.value;
-            
-            // Reset all color options
-            colorItems.forEach(item => {
-                item.classList.add('color-disabled');
-            });
-            colorRadios.forEach(radio => {
-                radio.checked = false;
-                radio.disabled = true;
-            });
-
-            // Reset all sleeve options
-            sleeveItems.forEach(item => {
-                item.classList.remove('color-disabled');
-            });
-            sleeveRadios.forEach(radio => {
-                radio.checked = false;
-                radio.disabled = false;
-            });
-
-            // Enable specific colors and sleeve options based on code
-            if (code === '01' || code === '02') {
-                // Kaos: Enable Hitam, Putih, Hijau + both sleeve options
-                enableColor('black');
-                enableColor('white');
-                enableColor('green');
-            } else if (code === '03' || code === '04' || code === '05' || code === '06') {
-                // Kaos: Enable Hitam only + both sleeve options
-                enableColor('black');
-            } else if (code === '07' || code === '08') {
-                // Sweater: Enable Hitam, Navy + long sleeve only
-                enableColor('black');
-                enableColor('navy');
-                
-                // For sweater, disable short sleeve and auto-select long sleeve
-                document.getElementById('short').disabled = true;
-                document.getElementById('short').closest('.radio-item').classList.add('color-disabled');
-                document.getElementById('long').checked = true;
-            }
-
-            updateSummary();
-        });
-
-        function enableColor(colorId) {
-            const radio = document.getElementById(colorId);
-            const item = radio.closest('.radio-item');
-            item.classList.remove('color-disabled');
-            radio.disabled = false;
-        }
-
-        // Update summary when form changes
-        form.addEventListener('change', updateSummary);
         form.addEventListener('input', updateSummary);
+        form.addEventListener('change', updateSummary);
 
-        function updateSummary() {
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-            
-            if (data.shirtCode && data.color && data.sleeve && data.size && data.quantity) {
-                let summary = '';
-                summary += `<div class="summary-item"><span>Nama Pemesan:</span><span>${data.customerName || '-'}</span></div>`;
-                summary += `<div class="summary-item"><span>Telepon:</span><span>${data.phone || '-'}</span></div>`;
-                summary += `<div class="summary-item"><span>Kode Kaos:</span><span>${data.shirtCode}</span></div>`;
-                summary += `<div class="summary-item"><span>Warna:</span><span>${data.color}</span></div>`;
-                summary += `<div class="summary-item"><span>Lengan:</span><span>${data.sleeve}</span></div>`;
-                summary += `<div class="summary-item"><span>Ukuran:</span><span>${data.size}</span></div>`;
-                summary += `<div class="summary-item"><span>Jumlah:</span><span>${data.quantity} pcs</span></div>`;
-                if (data.notes) {
-                    summary += `<div class="summary-item"><span>Catatan:</span><span>${data.notes}</span></div>`;
-                }
-                
-                summaryContent.innerHTML = summary;
-                orderSummary.classList.add('show');
-            } else {
-                orderSummary.classList.remove('show');
-            }
-        }
-
-        // Handle form submission
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
+            const customerName = document.getElementById('customerName').value;
+            const phone = document.getElementById('phone').value;
+            const notes = document.getElementById('notes').value;
             
-            // Validate required fields
-            if (!data.customerName || !data.phone || !data.shirtCode || !data.color || !data.sleeve || !data.size || !data.quantity) {
-                alert('Mohon lengkapi semua field yang wajib diisi!');
+            if (!customerName || !phone) {
+                alert('Mohon lengkapi nama dan nomor telepon!');
+                return;
+            }
+            
+            const validProducts = [];
+            products.forEach(productId => {
+                const code = document.querySelector(`select[name="code_${productId}"]`)?.value;
+                const color = getSelectedValue(productId, 'colors');
+                const sleeve = getSelectedValue(productId, 'sleeves');
+                const size = document.querySelector(`select[name="size_${productId}"]`)?.value;
+                const quantity = parseInt(document.querySelector(`input[name="quantity_${productId}"]`)?.value) || 0;
+                
+                if (code && color && sleeve && size && quantity > 0) {
+                    validProducts.push({ code, color, sleeve, size, quantity });
+                }
+            });
+            
+            if (validProducts.length === 0) {
+                alert('Mohon lengkapi minimal satu produk!');
                 return;
             }
             
             // Create WhatsApp message
             let message = "PESANAN BARU KAOS\n\n";
-            message += `Nama: ${data.customerName}\n`;
-            message += `Telepon: ${data.phone}\n`;
-            message += `Kode Kaos: ${data.shirtCode}\n`;
-            message += `Warna: ${data.color}\n`;
-            message += `Lengan: ${data.sleeve}\n`;
-            message += `Ukuran: ${data.size}\n`;
-            message += `Jumlah: ${data.quantity} pcs\n`;
-            if (data.notes) {
-                message += `Catatan: ${data.notes}\n`;
+            message += `Nama: ${customerName}\n`;
+            message += `Telepon: ${phone}\n\n`;
+            
+            message += "DETAIL PESANAN:\n";
+            validProducts.forEach((product, index) => {
+                message += `\n${index + 1}. Kode ${product.code}\n`;
+                message += `   Warna: ${product.color}\n`;
+                message += `   Lengan: ${product.sleeve}\n`;
+                message += `   Ukuran: ${product.size}\n`;
+                message += `   Jumlah: ${product.quantity} pcs\n`;
+            });
+            
+            const totalQuantity = validProducts.reduce((sum, p) => sum + p.quantity, 0);
+            message += `\nTOTAL: ${totalQuantity} pcs\n`;
+            
+            if (notes) {
+                message += `\nCatatan: ${notes}\n`;
             }
             message += `\nWaktu Pemesanan: ${new Date().toLocaleString('id-ID')}`;
             
-            // Encode message for URL
             const encodedMessage = encodeURIComponent(message);
-            
-            // WhatsApp number updated to 6285184666545
-            const whatsappNumber = "6287753541396";
-            
-            // Create WhatsApp URL
+            const whatsappNumber = "6285184666545";
             const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
             
-            // Open WhatsApp
             window.open(whatsappURL, '_blank');
             
-            // Show success message
             setTimeout(() => {
                 alert('Form berhasil dikirim! WhatsApp akan terbuka dalam tab baru.\n\nJika WhatsApp tidak terbuka otomatis, silakan copy pesan dan kirim manual.');
             }, 500);
-            
-            // Optional: Reset form after successful submission
-            // form.reset();
-            // orderSummary.classList.remove('show');
         });
+
+        // Initialize first product
+        addProduct();
     </script>
 </body>
 </html>
