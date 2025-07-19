@@ -226,7 +226,7 @@
             border: 2px solid #ddd;
             border-radius: 8px;
             background: white;
-            color: #333;
+            color: #374151;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
@@ -239,10 +239,12 @@
             gap: 8px;
         }
 
-        .option-button:hover:not(.disabled) {
+        .option-button:hover:not(.disabled):not(.selected) {
             border-color: #4CAF50;
             background: rgba(76, 175, 80, 0.1);
+            color: #2E7D32;
             transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
         }
 
         .option-button.selected {
@@ -251,6 +253,13 @@
             color: white;
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .option-button.selected:hover {
+            background: linear-gradient(45deg, #2E7D32, #1B5E20);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
         }
 
         .option-button.disabled {
