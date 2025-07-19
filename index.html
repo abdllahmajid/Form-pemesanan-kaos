@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Pemesanan Kaos</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #81C784 0%, #4CAF50 100%);
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .radio-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .radio-item {
+            width: 100%;
+        }
+
+        .radio-item input[type="radio"] {
+            display: none;
+        }
+
+        .radio-item label {
+            display: block;
+            padding: 15px 10px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            margin-bottom: 0;
+            font-size: 14px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .radio-item input[type="radio"]:checked + label {
+            border-color: #4CAF50;
+            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: translateY(-1px);
+        }
+
+        .color-disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .info-box {
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .info-box h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            color: #666;
+            margin-left: 20px;
+        }
+
+        .order-summary {
+            background: rgba(46, 125, 50, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .order-summary.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .size-section {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .size-section select {
+            flex: 1;
+        }
+
+        .size-chart-btn {
+            padding: 15px 20px;
+            background: linear-gradient(45deg, #66BB6A, #43A047);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .size-chart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 187, 106, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            color: #aaa;
+            float: right;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #4CAF50;
+        }
+
+        .size-chart-container {
+            text-align: center;
+        }
+
+        .size-chart-container h2 {
+            color: #333;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .size-chart-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .size-chart-table th,
+        .size-chart-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .size-chart-table th {
+            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            color: white;
+            font-weight: 600;
+        }
+
+        .size-chart-table tr:hover {
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .measurement-guide {
+            text-align: left;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 12px;
+        }
+
+        .measurement-guide h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+
+        .measurement-guide ul {
+            margin-left: 20px;
+            color: #666;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #2E7D32;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+            
+            .radio-group {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .radio-item label {
+                padding: 12px 8px;
+                font-size: 13px;
+                min-height: 50px;
+            }
+            
+            .size-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .size-chart-btn {
+                width: 100%;
+                margin-top: 0;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .size-chart-table th,
+            .size-chart-table td {
+                padding: 8px 5px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.6em;
+            }
+            
+            .radio-group {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .radio-item label {
+                padding: 10px 8px;
+                font-size: 12px;
+                min-height: 45px;
+            }
+            
+            select, input {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            .btn-submit {
+                padding: 15px;
+                font-size: 16px;
+            }
+            
+            .summary-item {
+                font-size: 14px;
+            }
+            
+            .info-box {
+                padding: 15px;
+            }
+            
+            .info-box ul {
+                font-size: 14px;
+            }
+        }
+
+        /* Animation */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Form Pemesanan Kaos</h1>
+        
+        <div class="info-box">
+            <h3>Informasi Produk:</h3>
+            <ul>
+                <li>Kode 01-02: Kaos tersedia warna Hitam, Putih, Hijau (lengan panjang/pendek)</li>
+                <li>Kode 03-06: Kaos hanya tersedia warna Hitam (lengan panjang/pendek)</li>
+                <li>Kode 07-08: Sweater tersedia warna Hitam, Navy (hanya lengan panjang)</li>
+            </ul>
+        </div>
+
+        <form id="orderForm">
+            <div class="form-group">
+                <label for="customerName">Nama Pemesan:</label>
+                <input type="text" id="customerName" name="customerName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Nomor Telepon:</label>
+                <input type="tel" id="phone" name="phone" placeholder="Contoh: 085123456789" required>
+            </div>
+
+            <div class="form-group">
+                <label for="shirtCode">Kode Kaos:</label>
+                <select id="shirtCode" name="shirtCode" required>
+                    <option value="">-- Pilih Kode Kaos --</option>
+                    <option value="01">Kode 01</option>
+                    <option value="02">Kode 02</option>
+                    <option value="03">Kode 03</option>
+                    <option value="04">Kode 04</option>
+                    <option value="05">Kode 05</option>
+                    <option value="06">Kode 06</option>
+                    <option value="07">Kode 07</option>
+                    <option value="08">Kode 08</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Warna Kaos:</label>
+                <div class="radio-group" id="colorOptions">
+                    <div class="radio-item color-disabled">
+                        <input type="radio" id="black" name="color" value="hitam">
+                        <label for="black">⚫ Hitam</label>
+                    </div>
+                    <div class="radio-item color-disabled">
+                        <input type="radio" id="white" name="color" value="putih">
+                        <label for="white">⚪ Putih</label>
+                    </div>
+                    <div class="radio-item color-disabled">
+                        <input type="radio" id="green" name="color" value="hijau">
+                        <label for="green">🟢 Hijau</label>
+                    </div>
+                    <div class="radio-item color-disabled">
+                        <input type="radio" id="navy" name="color" value="navy">
+                        <label for="navy">🔵 Navy</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Jenis Lengan:</label>
+                <div class="radio-group" id="sleeveOptions">
+                    <div class="radio-item">
+                        <input type="radio" id="short" name="sleeve" value="pendek" required>
+                        <label for="short">Lengan Pendek</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="long" name="sleeve" value="panjang">
+                        <label for="long">Lengan Panjang</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="size">Ukuran:</label>
+                <div class="size-section">
+                    <select id="size" name="size" required>
+                        <option value="">-- Pilih Ukuran --</option>
+                        <option value="S">S (Small)</option>
+                        <option value="M">M (Medium)</option>
+                        <option value="L">L (Large)</option>
+                        <option value="XL">XL (Extra Large)</option>
+                        <option value="XXL">XXL (Double XL)</option>
+                        <option value="3XL">3XL (Triple XL)</option>
+                        <option value="4XL">4XL (Quad XL)</option>
+                        <option value="5XL">5XL (Penta XL)</option>
+                    </select>
+                    <button type="button" class="size-chart-btn" id="sizeChartBtn">
+                        Lihat Size Chart
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Jumlah:</label>
+                <input type="number" id="quantity" name="quantity" min="1" value="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Catatan Tambahan:</label>
+                <input type="text" id="notes" name="notes" placeholder="Masukkan catatan khusus jika ada...">
+            </div>
+
+            <div class="order-summary" id="orderSummary">
+                <h3>Ringkasan Pesanan:</h3>
+                <div id="summaryContent"></div>
+            </div>
+
+            <button type="submit" class="btn-submit">Pesan Sekarang</button>
+        </form>
+
+        <!-- Size Chart Modal -->
+        <div id="sizeChartModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="size-chart-container">
+                    <h2>Size Chart</h2>
+                    
+                    <table class="size-chart-table">
+                        <thead>
+                            <tr>
+                                <th>Ukuran</th>
+                                <th>Lebar Dada (cm)</th>
+                                <th>Panjang Badan (cm)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>S</strong></td>
+                                <td>45</td>
+                                <td>66</td>
+                            </tr>
+                            <tr>
+                                <td><strong>M</strong></td>
+                                <td>47</td>
+                                <td>68</td>
+                            </tr>
+                            <tr>
+                                <td><strong>L</strong></td>
+                                <td>50</td>
+                                <td>72</td>
+                            </tr>
+                            <tr>
+                                <td><strong>XL</strong></td>
+                                <td>53</td>
+                                <td>74</td>
+                            </tr>
+                            <tr>
+                                <td><strong>XXL</strong></td>
+                                <td>56</td>
+                                <td>75</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="measurement-guide">
+                        <h3>Cara Mengukur:</h3>
+                        <ul>
+                            <li><strong>Lebar Dada:</strong> Ukur dari ketiak kiri ke ketiak kanan</li>
+                            <li><strong>Panjang Badan:</strong> Ukur dari bahu tertinggi hingga ujung bawah</li>
+                        </ul>
+                        <p style="margin-top: 10px; font-style: italic; color: #666;">
+                            <strong>Tips:</strong> Pilih ukuran yang lebih besar jika Anda ragu antara dua ukuran
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const shirtCode = document.getElementById('shirtCode');
+        const colorOptions = document.getElementById('colorOptions');
+        const colorRadios = colorOptions.querySelectorAll('input[type="radio"]');
+        const colorItems = colorOptions.querySelectorAll('.radio-item');
+        const sleeveOptions = document.getElementById('sleeveOptions');
+        const sleeveRadios = sleeveOptions.querySelectorAll('input[type="radio"]');
+        const sleeveItems = sleeveOptions.querySelectorAll('.radio-item');
+        const orderSummary = document.getElementById('orderSummary');
+        const summaryContent = document.getElementById('summaryContent');
+        const form = document.getElementById('orderForm');
+
+        // Size Chart Modal
+        const sizeChartBtn = document.getElementById('sizeChartBtn');
+        const sizeChartModal = document.getElementById('sizeChartModal');
+        const closeModal = document.querySelector('.close');
+
+        // Open size chart modal
+        sizeChartBtn.addEventListener('click', function() {
+            sizeChartModal.style.display = 'block';
+        });
+
+        // Close size chart modal
+        closeModal.addEventListener('click', function() {
+            sizeChartModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === sizeChartModal) {
+                sizeChartModal.style.display = 'none';
+            }
+        });
+
+        // Phone number formatting
+        const phoneInput = document.getElementById('phone');
+        
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            
+            // If starts with 0, replace with 62
+            if (value.startsWith('0')) {
+                value = '62' + value.substring(1);
+            }
+            // If starts with 8 (without 0), add 62
+            else if (value.startsWith('8') && !value.startsWith('62')) {
+                value = '62' + value;
+            }
+            // If doesn't start with 62 and has digits, assume it needs 62 prefix
+            else if (value.length > 0 && !value.startsWith('62')) {
+                // Only add 62 if it looks like an Indonesian number (starts with 8)
+                if (value.charAt(0) === '8') {
+                    value = '62' + value;
+                }
+            }
+            
+            e.target.value = value;
+        });
+
+        phoneInput.addEventListener('paste', function(e) {
+            // Handle paste event
+            setTimeout(() => {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                if (value.startsWith('0')) {
+                    value = '62' + value.substring(1);
+                    e.target.value = value;
+                } else if (value.startsWith('8') && !value.startsWith('62')) {
+                    value = '62' + value;
+                    e.target.value = value;
+                }
+            }, 10);
+        });
+
+        // Update color options based on shirt code
+        shirtCode.addEventListener('change', function() {
+            const code = this.value;
+            
+            // Reset all color options
+            colorItems.forEach(item => {
+                item.classList.add('color-disabled');
+            });
+            colorRadios.forEach(radio => {
+                radio.checked = false;
+                radio.disabled = true;
+            });
+
+            // Reset all sleeve options
+            sleeveItems.forEach(item => {
+                item.classList.remove('color-disabled');
+            });
+            sleeveRadios.forEach(radio => {
+                radio.checked = false;
+                radio.disabled = false;
+            });
+
+            // Enable specific colors and sleeve options based on code
+            if (code === '01' || code === '02') {
+                // Kaos: Enable Hitam, Putih, Hijau + both sleeve options
+                enableColor('black');
+                enableColor('white');
+                enableColor('green');
+            } else if (code === '03' || code === '04' || code === '05' || code === '06') {
+                // Kaos: Enable Hitam only + both sleeve options
+                enableColor('black');
+            } else if (code === '07' || code === '08') {
+                // Sweater: Enable Hitam, Navy + long sleeve only
+                enableColor('black');
+                enableColor('navy');
+                
+                // For sweater, disable short sleeve and auto-select long sleeve
+                document.getElementById('short').disabled = true;
+                document.getElementById('short').closest('.radio-item').classList.add('color-disabled');
+                document.getElementById('long').checked = true;
+            }
+
+            updateSummary();
+        });
+
+        function enableColor(colorId) {
+            const radio = document.getElementById(colorId);
+            const item = radio.closest('.radio-item');
+            item.classList.remove('color-disabled');
+            radio.disabled = false;
+        }
+
+        // Update summary when form changes
+        form.addEventListener('change', updateSummary);
+        form.addEventListener('input', updateSummary);
+
+        function updateSummary() {
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            if (data.shirtCode && data.color && data.sleeve && data.size && data.quantity) {
+                let summary = '';
+                summary += `<div class="summary-item"><span>Nama Pemesan:</span><span>${data.customerName || '-'}</span></div>`;
+                summary += `<div class="summary-item"><span>Telepon:</span><span>${data.phone || '-'}</span></div>`;
+                summary += `<div class="summary-item"><span>Kode Kaos:</span><span>${data.shirtCode}</span></div>`;
+                summary += `<div class="summary-item"><span>Warna:</span><span>${data.color}</span></div>`;
+                summary += `<div class="summary-item"><span>Lengan:</span><span>${data.sleeve}</span></div>`;
+                summary += `<div class="summary-item"><span>Ukuran:</span><span>${data.size}</span></div>`;
+                summary += `<div class="summary-item"><span>Jumlah:</span><span>${data.quantity} pcs</span></div>`;
+                if (data.notes) {
+                    summary += `<div class="summary-item"><span>Catatan:</span><span>${data.notes}</span></div>`;
+                }
+                
+                summaryContent.innerHTML = summary;
+                orderSummary.classList.add('show');
+            } else {
+                orderSummary.classList.remove('show');
+            }
+        }
+
+        // Handle form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Validate required fields
+            if (!data.customerName || !data.phone || !data.shirtCode || !data.color || !data.sleeve || !data.size || !data.quantity) {
+                alert('Mohon lengkapi semua field yang wajib diisi!');
+                return;
+            }
+            
+            // Create WhatsApp message
+            let message = "PESANAN BARU KAOS\n\n";
+            message += `Nama: ${data.customerName}\n`;
+            message += `Telepon: ${data.phone}\n`;
+            message += `Kode Kaos: ${data.shirtCode}\n`;
+            message += `Warna: ${data.color}\n`;
+            message += `Lengan: ${data.sleeve}\n`;
+            message += `Ukuran: ${data.size}\n`;
+            message += `Jumlah: ${data.quantity} pcs\n`;
+            if (data.notes) {
+                message += `Catatan: ${data.notes}\n`;
+            }
+            message += `\nWaktu Pemesanan: ${new Date().toLocaleString('id-ID')}`;
+            
+            // Encode message for URL
+            const encodedMessage = encodeURIComponent(message);
+            
+            // WhatsApp number updated to 6285184666545
+            const whatsappNumber = "6285184666545";
+            
+            // Create WhatsApp URL
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+            
+            // Open WhatsApp
+            window.open(whatsappURL, '_blank');
+            
+            // Show success message
+            setTimeout(() => {
+                alert('Form berhasil dikirim! WhatsApp akan terbuka dalam tab baru.\n\nJika WhatsApp tidak terbuka otomatis, silakan copy pesan dan kirim manual.');
+            }, 500);
+            
+            // Optional: Reset form after successful submission
+            // form.reset();
+            // orderSummary.classList.remove('show');
+        });
+    </script>
+</body>
+</html>
