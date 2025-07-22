@@ -696,7 +696,27 @@
         // Global variables
         let productCounter = 0;
         let products = [];
-        
+
+        // Product pricing configuration
+        const PRODUCT_PRICES = {
+            '01': { base: 85000, category: 'regular' },
+            '02': { base: 85000, category: 'regular' },
+            '03': { base: 80000, category: 'regular' },
+            '04': { base: 75000, category: 'regular' },
+            '05': { base: 75000, category: 'regular' },
+            '06': { base: 65000, category: 'regular' },
+            '07': { base: 140000, category: 'sweater' },
+            '08': { base: 140000, category: 'sweater' }
+        };
+
+        const PRICING_RULES = {
+            longSleeveExtra: 8000, // Extra for long sleeve on regular items (01-06)
+            oversizeExtra: 5000,   // Extra per size above XL
+            bulkDiscountThreshold: 12, // Minimum quantity for bulk discount
+            bulkDiscountAmount: 10000  // Discount per piece for bulk orders
+        };
+
+    
         // Product options
         const COLOR_OPTIONS = [
             { value: 'hitam', label: 'Hitam', emoji: '⚫' },
@@ -750,6 +770,39 @@
                 return ['panjang']; // Sweater only long sleeve
             }
             return ['pendek', 'panjang'];
+        }
+
+        function calculatePrice(code, sleeve, size, quantity) {
+            if (!PRODUCT_PRICES[code]) return 0;
+            
+            const product = PRODUCT_PRICES[code];
+            let unitPrice = product.base;
+            
+            // Add long sleeve extra for regular items (codes 01-06)
+            if (product.category === 'regular' && sleeve === 'panjang') {
+                unitPrice += PRICING_RULES.longSleeveExtra;
+            }
+            
+            // Add oversize extra for sizes above XL
+            const sizeOrder = ['S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL', '5XL'];
+            const sizeIndex = sizeOrder.indexOf(size);
+            const xlIndex = sizeOrder.indexOf('XL');
+            
+            if (sizeIndex > xlIndex) {
+                const oversizeLevels = sizeIndex - xlIndex;
+                unitPrice += (PRICING_RULES.oversizeExtra * oversizeLevels);
+            }
+            
+            return unitPrice * quantity;
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
         }
 
         function formatPhoneNumber(value) {
@@ -986,8 +1039,9 @@
             
             const validProducts = [];
             let totalQuantity = 0;
+            let subtotal = 0;
             
-            products.forEach(productId => {
+            products.forEach((productId, index) => {
                 const code = document.querySelector(`select[name="code_${productId}"]`)?.value;
                 const color = getSelectedValue(productId, 'colors');
                 const sleeve = getSelectedValue(productId, 'sleeves');
@@ -995,10 +1049,29 @@
                 const quantity = parseInt(document.querySelector(`input[name="quantity_${productId}"]`)?.value) || 0;
                 
                 if (code && color && sleeve && size && quantity > 0) {
-                    validProducts.push({ code, color, sleeve, size, quantity });
+                    const price = calculatePrice(code, sleeve, size, quantity);
+                    validProducts.push({ 
+                        index: index + 1,
+                        code, 
+                        color, 
+                        sleeve, 
+                        size, 
+                        quantity,
+                        price,
+                        unitPrice: price / quantity
+                    });
                     totalQuantity += quantity;
+                    subtotal += price;
                 }
             });
+            
+            // Calculate bulk discount
+            let discount = 0;
+            if (totalQuantity >= PRICING_RULES.bulkDiscountThreshold) {
+                discount = totalQuantity * PRICING_RULES.bulkDiscountAmount;
+            }
+            
+            const total = subtotal - discount;
             
             if (customerName && phone && validProducts.length > 0) {
                 let summaryHTML = `
@@ -1014,18 +1087,19 @@
                 
                 if (validProducts.length > 0) {
                     summaryHTML += '<div class="summary-products">';
-                    validProducts.forEach((product, index) => {
+                    validProducts.forEach((product) => {
                         summaryHTML += `
                             <div class="summary-product">
                                 <div class="summary-product-header">
-                                    <span>Produk ${index + 1}</span>
-                                    <span>${product.quantity} pcs</span>
+                                    <span>Produk ${product.index}</span>
+                                    <span>${product.quantity} pcs - ${formatCurrency(product.price)}</span>
                                 </div>
                                 <div class="summary-product-details">
                                     <span>Kode: ${product.code}</span>
                                     <span>Ukuran: ${product.size}</span>
                                     <span>Warna: ${product.color}</span>
                                     <span>Lengan: ${product.sleeve}</span>
+                                    <span colspan="2">Harga satuan: ${formatCurrency(product.unitPrice)}</span>
                                 </div>
                             </div>
                         `;
@@ -1046,6 +1120,26 @@
                     <div class="summary-row">
                         <span>Total Pesanan:</span>
                         <span>${totalQuantity} pcs</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span>${formatCurrency(subtotal)}</span>
+                    </div>
+                `;
+                
+                if (discount > 0) {
+                    summaryHTML += `
+                        <div class="summary-row" style="color: var(--success-color);">
+                            <span>Diskon Grosir (${totalQuantity} pcs):</span>
+                            <span>-${formatCurrency(discount)}</span>
+                        </div>
+                    `;
+                }
+                
+                summaryHTML += `
+                    <div class="summary-row" style="font-size: 18px; background-color: var(--light-gray); padding: 15px; margin-top: 10px; border-radius: var(--border-radius);">
+                        <span><strong>Total Bayar:</strong></span>
+                        <span><strong>${formatCurrency(total)}</strong></span>
                     </div>
                 `;
                 
@@ -1097,8 +1191,12 @@
                 return;
             }
             
+            // Only one validProducts block!
             const validProducts = [];
-            products.forEach(productId => {
+            let totalQuantity = 0;
+            let subtotal = 0;
+
+            products.forEach((productId, index) => {
                 const code = document.querySelector(`select[name="code_${productId}"]`)?.value;
                 const color = getSelectedValue(productId, 'colors');
                 const sleeve = getSelectedValue(productId, 'sleeves');
@@ -1106,32 +1204,61 @@
                 const quantity = parseInt(document.querySelector(`input[name="quantity_${productId}"]`)?.value) || 0;
                 
                 if (code && color && sleeve && size && quantity > 0) {
-                    validProducts.push({ code, color, sleeve, size, quantity });
+                    const price = calculatePrice(code, sleeve, size, quantity);
+                    validProducts.push({ 
+                        index: index + 1,
+                        code, 
+                        color, 
+                        sleeve, 
+                        size, 
+                        quantity,
+                        price,
+                        unitPrice: price / quantity
+                    });
+                    totalQuantity += quantity;
+                    subtotal += price;
                 }
             });
-            
+
             if (validProducts.length === 0) {
                 alert('Mohon lengkapi minimal satu produk!');
                 return;
             }
-            
+
+            // Calculate bulk discount
+            let discount = 0;
+            if (totalQuantity >= PRICING_RULES.bulkDiscountThreshold) {
+                discount = totalQuantity * PRICING_RULES.bulkDiscountAmount;
+            }
+
+            const total = subtotal - discount;
+
             // Create WhatsApp message
             let message = "PESANAN BARU KAOS\n\n";
             message += `Nama: ${customerName}\n`;
             message += `Telepon: ${phone}\n\n`;
-            
+
             message += "DETAIL PESANAN:\n";
-            validProducts.forEach((product, index) => {
-                message += `\n${index + 1}. Kode ${product.code}\n`;
+            validProducts.forEach((product) => {
+                message += `\n${product.index}. Kode ${product.code}\n`;
                 message += `   Warna: ${product.color}\n`;
                 message += `   Lengan: ${product.sleeve}\n`;
                 message += `   Ukuran: ${product.size}\n`;
                 message += `   Jumlah: ${product.quantity} pcs\n`;
+                message += `   Harga: ${formatCurrency(product.price)}\n`;
             });
-            
-            const totalQuantity = validProducts.reduce((sum, p) => sum + p.quantity, 0);
-            message += `\nTOTAL: ${totalQuantity} pcs\n`;
-            
+
+            message += `\n━━━━━━━━━━━━━━━━━━━━\n`;
+            message += `TOTAL: ${totalQuantity} pcs\n`;
+            message += `SUBTOTAL: ${formatCurrency(subtotal)}\n`;
+
+            if (discount > 0) {
+                message += `DISKON GROSIR: -${formatCurrency(discount)}\n`;
+            }
+
+            message += `TOTAL BAYAR: ${formatCurrency(total)}\n`;
+            message += `━━━━━━━━━━━━━━━━━━━━\n`;
+
             if (notes) {
                 message += `\nCatatan: ${notes}\n`;
             }
