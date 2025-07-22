@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Pemesanan Kaos - Multi Produk</title>
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -12,89 +14,115 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #81C784 0%, #4CAF50 100%);
             min-height: 100vh;
             padding: 15px;
             font-size: 14px;
+            line-height: 1.6;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 30px;
-            font-size: 2.2em;
-            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            margin-bottom: 35px;
+            font-size: 2.4em;
+            font-weight: 700;
+            background: linear-gradient(45deg, #2E7D32, #4CAF50);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            letter-spacing: -0.5px;
         }
 
         .info-box {
-            background: rgba(76, 175, 80, 0.1);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            border-left: 4px solid #4CAF50;
+            background: rgba(76, 175, 80, 0.08);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #4CAF50;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.15);
         }
 
         .info-box h3 {
-            color: #4CAF50;
-            margin-bottom: 10px;
-            font-size: 1.1em;
+            color: #2E7D32;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
         }
 
         .info-box ul {
-            color: #666;
+            color: #555;
             margin-left: 20px;
             font-size: 14px;
         }
 
         .info-box li {
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 5px;
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: #333;
             font-size: 1em;
+            transition: color 0.3s ease;
+        }
+
+        label:hover {
+            color: #2E7D32;
         }
 
         .required::after {
             content: " *";
             color: #d4183d;
+            font-weight: bold;
         }
 
         select, input, textarea {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 12px;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 14px;
             font-size: 14px;
+            font-family: 'Poppins', sans-serif;
             transition: all 0.3s ease;
             background: white;
+            color: #333;
+        }
+
+        select:hover, input:hover, textarea:hover {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.02);
         }
 
         select:focus, input:focus, textarea:focus {
             outline: none;
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+            border-color: #2E7D32;
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.1);
             transform: translateY(-2px);
         }
 
@@ -128,9 +156,9 @@
         }
 
         .btn {
-            padding: 10px 15px;
+            padding: 12px 18px;
             border: 2px solid #4CAF50;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -141,12 +169,15 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn:hover {
             background: #4CAF50;
             color: white;
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
         }
 
         .btn-add {
@@ -158,6 +189,7 @@
         .btn-add:hover {
             background: linear-gradient(45deg, #2E7D32, #1B5E20);
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.4);
         }
 
         .btn-remove {
@@ -171,22 +203,30 @@
         .btn-remove:hover {
             background: #d4183d;
             color: white;
+            box-shadow: 0 5px 15px rgba(212, 24, 61, 0.3);
         }
 
         .product-card {
             background: white;
             border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 25px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: rgba(76, 175, 80, 0.3);
         }
 
         .product-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .product-title {
@@ -209,7 +249,7 @@
         /* Button-style options */
         .button-group {
             display: grid;
-            gap: 8px;
+            gap: 10px;
             margin-top: 10px;
         }
 
@@ -222,9 +262,9 @@
         }
 
         .option-button {
-            padding: 12px 16px;
+            padding: 14px 16px;
             border: 2px solid #ddd;
-            border-radius: 8px;
+            border-radius: 12px;
             background: white;
             color: #374151;
             font-size: 14px;
@@ -232,7 +272,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
-            min-height: 48px;
+            min-height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -243,8 +283,8 @@
             border-color: #4CAF50;
             background: rgba(76, 175, 80, 0.1);
             color: #2E7D32;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
         }
 
         .option-button.selected {
@@ -252,14 +292,14 @@
             border-color: #4CAF50;
             color: white;
             transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
         }
 
         .option-button.selected:hover {
             background: linear-gradient(45deg, #2E7D32, #1B5E20);
             color: white;
             transform: scale(1.05);
-            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.4);
         }
 
         .option-button.disabled {
@@ -274,21 +314,37 @@
 
         .btn-submit {
             width: 100%;
-            padding: 18px;
-            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            padding: 20px;
+            background: linear-gradient(45deg, #2E7D32, #4CAF50);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
         }
 
         .btn-submit:hover:not(:disabled) {
             transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(76, 175, 80, 0.4);
+            box-shadow: 0 20px 40px rgba(46, 125, 50, 0.4);
+        }
+
+        .btn-submit:hover:before {
+            left: 100%;
         }
 
         .btn-submit:disabled {
@@ -299,30 +355,32 @@
 
         /* Order Summary */
         .order-summary {
-            background: rgba(76, 175, 80, 0.1);
+            background: rgba(76, 175, 80, 0.08);
             border: 2px solid rgba(76, 175, 80, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
             display: none;
+            transition: all 0.3s ease;
         }
 
         .order-summary.show {
             display: block;
-            animation: slideIn 0.3s ease;
+            animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .order-summary h3 {
             color: #2E7D32;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            font-size: 1.3em;
         }
 
         .summary-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
-            padding: 5px 0;
-            border-bottom: 1px dashed #ddd;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(76, 175, 80, 0.2);
             font-size: 14px;
         }
 
@@ -331,36 +389,44 @@
             font-weight: 600;
             font-size: 16px;
             color: #2E7D32;
-            margin-top: 10px;
-            padding-top: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
             border-top: 2px solid rgba(76, 175, 80, 0.3);
         }
 
         .summary-products {
-            margin: 15px 0;
+            margin: 20px 0;
         }
 
         .summary-product {
             background: white;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
             border: 1px solid rgba(76, 175, 80, 0.2);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .summary-product:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.15);
         }
 
         .summary-product-header {
             display: flex;
             justify-content: space-between;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            color: #333;
         }
 
         .summary-product-details {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 5px;
-            font-size: 12px;
-            color: #666;
+            gap: 8px;
+            font-size: 13px;
+            color: #555;
         }
 
         /* Modal */
@@ -373,81 +439,127 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
 
         .modal-content {
             position: relative;
             background-color: white;
             margin: 5% auto;
-            padding: 30px;
-            border-radius: 20px;
+            padding: 35px;
+            border-radius: 24px;
             width: 90%;
             max-width: 800px;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: modalFadeIn 0.4s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .close {
             position: absolute;
-            right: 20px;
-            top: 15px;
+            right: 25px;
+            top: 20px;
             color: #aaa;
             float: right;
             font-size: 32px;
             font-weight: bold;
             cursor: pointer;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, transform 0.3s ease;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
 
         .close:hover {
             color: #4CAF50;
+            transform: rotate(90deg);
+            background: rgba(76, 175, 80, 0.1);
         }
 
         .size-chart-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin: 25px 0;
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         .size-chart-table th,
         .size-chart-table td {
-            padding: 12px 15px;
+            padding: 15px 18px;
             text-align: center;
             border-bottom: 1px solid #eee;
         }
 
         .size-chart-table th {
-            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            background: linear-gradient(45deg, #2E7D32, #4CAF50);
             color: white;
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .size-chart-table tr:hover {
-            background-color: rgba(76, 175, 80, 0.1);
+            background-color: rgba(76, 175, 80, 0.08);
+        }
+
+        .size-chart-table tr:last-child td {
+            border-bottom: none;
         }
 
         .measurement-guide {
             text-align: left;
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(76, 175, 80, 0.1);
-            border-radius: 12px;
+            margin-top: 25px;
+            padding: 25px;
+            background: rgba(76, 175, 80, 0.08);
+            border-radius: 16px;
+            border-left: 4px solid #4CAF50;
         }
 
         .measurement-guide h3 {
-            color: #4CAF50;
-            margin-bottom: 10px;
+            color: #2E7D32;
+            margin-bottom: 15px;
+            font-size: 1.2em;
         }
 
         .measurement-guide ul {
             margin-left: 20px;
-            color: #666;
+            color: #555;
+        }
+
+        .measurement-guide li {
+            margin-bottom: 8px;
+        }
+
+        /* Loading animation */
+        @keyframes loading {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn-submit.loading:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: loading 1s ease infinite;
         }
 
         /* Mobile optimizations */
@@ -457,12 +569,12 @@
             }
             
             .container {
-                padding: 20px;
+                padding: 25px 20px;
             }
             
             h1 {
                 font-size: 1.8em;
-                margin-bottom: 20px;
+                margin-bottom: 25px;
             }
             
             .products-header {
@@ -486,19 +598,20 @@
             .modal-content {
                 margin: 10% auto;
                 width: 95%;
-                padding: 20px;
+                padding: 25px 20px;
             }
             
             .size-chart-table th,
             .size-chart-table td {
-                padding: 8px 5px;
-                font-size: 12px;
+                padding: 10px 8px;
+                font-size: 13px;
             }
         }
 
         @media (max-width: 480px) {
             .container {
-                padding: 15px;
+                padding: 20px 15px;
+                border-radius: 18px;
             }
             
             h1 {
@@ -506,13 +619,17 @@
             }
             
             .btn {
-                padding: 8px 12px;
-                font-size: 12px;
+                padding: 10px 14px;
+                font-size: 13px;
             }
             
             .btn-submit {
-                padding: 15px;
+                padding: 18px;
                 font-size: 16px;
+            }
+
+            .product-card {
+                padding: 20px 15px;
             }
         }
 
@@ -535,7 +652,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>FORM PEMESANAN KAOS DEWASA</h1>
+        <h1>Form Pemesanan Kaos</h1>
         
         <div class="info-box">
             <h3>Informasi Produk:</h3>
@@ -597,8 +714,8 @@
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <div style="text-align: center;">
-                    <h2 style="background: linear-gradient(45deg, #4CAF50, #2E7D32); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px;">Size Chart</h2>
-                    <p style="color: #666; margin-bottom: 20px;">Panduan ukuran untuk membantu Anda memilih ukuran yang tepat</p>
+                    <h2 style="background: linear-gradient(45deg, #2E7D32, #4CAF50); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 15px; font-size: 1.8em;">Size Chart</h2>
+                    <p style="color: #555; margin-bottom: 25px; font-size: 15px;">Panduan ukuran untuk membantu Anda memilih ukuran yang tepat</p>
                     
                     <table class="size-chart-table">
                         <thead>
@@ -643,7 +760,7 @@
                             <li><strong>Lebar Dada:</strong> Ukur dari ketiak kiri ke ketiak kanan</li>
                             <li><strong>Panjang Badan:</strong> Ukur dari bahu tertinggi hingga ujung bawah</li>
                         </ul>
-                        <p style="margin-top: 10px; font-style: italic; color: #666;">
+                        <p style="margin-top: 15px; font-style: italic; color: #555;">
                             <strong>Tips:</strong> Pilih ukuran yang lebih besar jika Anda ragu antara dua ukuran
                         </p>
                     </div>
@@ -1061,7 +1178,7 @@
             message += `\nWaktu Pemesanan: ${new Date().toLocaleString('id-ID')}`;
             
             const encodedMessage = encodeURIComponent(message);
-            const whatsappNumber = "6287753541396";
+            const whatsappNumber = "6285184666545";
             const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
             
             window.open(whatsappURL, '_blank');
