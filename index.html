@@ -150,13 +150,28 @@
         .btn-remove {
             background-color: var(--danger-color);
             color: white;
-            padding: 8px 12px;
-            font-size: 14px;
+            padding: 8px;
+            font-size: 16px;
             margin-left: auto;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
         }
 
         .btn-remove:hover {
             background-color: #c0392b;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-remove svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
         }
 
         .products-header {
@@ -757,7 +772,9 @@
                     <div class="product-header">
                         <div class="product-title">Produk ${products.length}</div>
                         <button type="button" class="btn btn-remove" onclick="removeProduct('${productId}')" ${products.length <= 1 ? 'style="display: none;"' : ''}>
-                            🗑️ Hapus
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                            </svg>
                         </button>
                     </div>
                     <div class="product-form">
